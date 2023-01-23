@@ -31,6 +31,9 @@ env-compile: ## compile requirements.txt / requirements-dev.txt using pip-tools
 
 # Development
 
+run: ## run the application
+	python virus_total_telegram_bot/cli.py
+
 install: ## install the package
 	pip install --no-cache-dir $(PIP_ARGS) .
 
@@ -47,7 +50,7 @@ lint-tests: ## static test code analysis with pylint
 	pylint --rcfile tests/.pylintrc tests
 
 code-style: ## check code style against PEP8 conventions
-	pycodestyle virus_total_telegram_bot
+	pycodestyle virus_total_telegram_bot --config=virus_total_telegram_bot/.pycodestyle --exclude=virus_total_telegram_bot/strings.py
 
 code-maintainability: ## calculates a maintainability index using radon
 	radon mi -s virus_total_telegram_bot
