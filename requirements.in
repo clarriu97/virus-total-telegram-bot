@@ -1,3 +1,4 @@
 click
 structlog
 pydantic
+python-telegram-bot
