@@ -1,5 +1,5 @@
 """Entrypoint of the app"""
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+from telegram.ext import ApplicationBuilder, CommandHandler
 
 from virus_total_telegram_bot.entities import Config
 from virus_total_telegram_bot.callbacks import (
@@ -17,7 +17,7 @@ def run(cfg: Config):
         The Config instance for the service.
     """
     application = ApplicationBuilder().token(cfg.bot_apikey).build()
-    
+
     start_handler = CommandHandler('start', start)
     application.add_handler(start_handler)
 
