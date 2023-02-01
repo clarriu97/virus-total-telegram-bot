@@ -1,6 +1,8 @@
 """
 Command-line interface that acts as the entrypoint from which the server can be started.
 """
+import os
+
 import click
 
 from virus_total_telegram_bot import __version__
@@ -8,25 +10,23 @@ from virus_total_telegram_bot import config
 from virus_total_telegram_bot import app
 
 
-@click.group()
-@click.version_option(version=__version__)
-def voice_alive_telegram_bot_cli():
+@click.command()
+def virus_total():
     """
-    Run the server from CLI
+    Entrypoint of the app.
+
+    To run it, simply put this command in your terminal:
+
+    ```bash
+    python virus_total_telegram_bot/cli.py
+    ```
     """
-
-
-@voice_alive_telegram_bot_cli.command("run")
-def run():
-    """Runs the Flask development server"""
-    cfg = config.load_configuration()
+    working_directory = os.getenv("WORKING_DIRECTORY", "/tmp")
+    artifacts_path, logs_path = config.create_application_directories(working_directory)
+    config.load_loggers(logs_path)
+    cfg = config.load_configuration(artifacts_path, logs_path)
     app.run(cfg)
 
 
-def main():  # pragma: no cover
-    """The main entrypoint for this application"""
-    voice_alive_telegram_bot_cli()
-
-
 if __name__ == "__main__":  # pragma: no cover
-    main()
+    virus_total()
