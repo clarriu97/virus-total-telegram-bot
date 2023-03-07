@@ -23,7 +23,7 @@ def run(cfg: Config):
     start_handler = CommandHandler('start', start)
     text_handler = MessageHandler(filters.TEXT, text)
     file_handler = MessageHandler(filters.Document.ALL, file)
-    
+
     application.add_handler(start_handler)
     application.add_handler(text_handler)
     application.add_handler(file_handler)

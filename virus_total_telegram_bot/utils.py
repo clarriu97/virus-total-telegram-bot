@@ -84,7 +84,7 @@ def get_user_id(update: Update):
         return update.callback_query.message.chat.id
 
 
-def get_user_language(update: Update):
+def get_user_language(update: Update):  # pylint: disable=unused-argument
     """
     Get the language in which the user wants to be addressed.
 
@@ -162,7 +162,7 @@ def save_request_data(context: CallbackContext, result):
     event_info['request']['result'] = result
 
 
-def request_served(update: Update, context: CallbackContext, save_artifacts=True):
+def request_served(update: Update, context: CallbackContext, save_artifacts=True):  # pylint: disable=unused-argument
     """Request served function"""
     if 'request_id' not in context.user_data:
         logger.warning('request_served_no_request_id')

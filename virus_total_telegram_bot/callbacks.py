@@ -16,14 +16,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_arrived(update, context, command="text")
     # get the text received from the user
-    text = update.message.text
+    text_received = update.message.text
     # send the text back to the user
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=text)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=text_received)
 
 
 async def file(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_arrived(update, context, command="file")
     # get the file received from the user
-    file = update.message.document
+    file_received = update.message.document
     # send the file back to the user
-    await context.bot.send_document(chat_id=update.effective_chat.id, document=file.file_id)
+    await context.bot.send_document(chat_id=update.effective_chat.id, document=file_received.file_id)
