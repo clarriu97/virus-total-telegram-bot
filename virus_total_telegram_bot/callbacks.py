@@ -1,4 +1,6 @@
 """All Bot Callbacks"""
+import vt
+
 from telegram import Update
 from telegram.ext import ContextTypes
 
@@ -14,7 +16,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['start'][ENGLISH])
 
 
-async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client):
     request_arrived(update, context, command="text")
     text_received = update.message.text
     if check_url(text_received):
@@ -25,7 +27,7 @@ async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=text_received)
 
 
-async def file(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client):
     request_arrived(update, context, command="file")
     # get the file received from the user
     file_received = update.message.document
