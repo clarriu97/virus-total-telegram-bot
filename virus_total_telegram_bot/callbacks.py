@@ -21,6 +21,8 @@ async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     text_received = update.message.text
     if check_url(text_received):
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['text_received']['is_url'][ENGLISH])
+        analysis = await client.scan_url_async(text_received, wait_for_completion=True)
+        print(analysis.to_dict())
     else:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['text_received']['is_not_url'][ENGLISH])
     # send the text back to the user
