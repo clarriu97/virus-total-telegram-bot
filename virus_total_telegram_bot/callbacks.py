@@ -3,7 +3,8 @@ from telegram import Update
 from telegram.ext import ContextTypes
 
 from virus_total_telegram_bot.utils import (
-    request_arrived
+    request_arrived,
+    check_url
 )
 from virus_total_telegram_bot.strings import dialogs, ENGLISH
 
@@ -15,8 +16,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     request_arrived(update, context, command="text")
-    # get the text received from the user
     text_received = update.message.text
+    if check_url(text_received):
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['text_received']['is_url'][ENGLISH])
+    else:
+        await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['text_received']['is_not_url'][ENGLISH])
     # send the text back to the user
     await context.bot.send_message(chat_id=update.effective_chat.id, text=text_received)
 
