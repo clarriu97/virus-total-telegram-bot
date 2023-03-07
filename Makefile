@@ -79,7 +79,7 @@ security: ## check source code for vulnerabilities
 	bandit -v -r virus_total_telegram_bot
 
 check-dependencies: ## check dependencies for vulnerabilities using safety
-	safety check --full-report
+	safety check --full-report -r requirements.txt
 
 docs: ## generate project docs
 	rm -rf site && mkdir -p site/reference/api
