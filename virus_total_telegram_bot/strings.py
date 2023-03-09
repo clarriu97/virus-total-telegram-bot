@@ -19,15 +19,19 @@ dialogs = {
             "resultados del análisis. 😊",
     },
     "text_received": {
-        "is_url": {
-            ENGLISH: "🔎 I am analyzing the URL you sent me...",
-            SPANISH: "🔎 Estoy analizando la URL que me enviaste...",
+        "analyzing": {
+            ENGLISH: "🔎 I am analyzing the URL you sent me, give me one second...",
+            SPANISH: "🔎 Estoy analizando la URL que me enviaste, dame un segundo...",
         },
-        "is_not_url": {
+        "error": {
             ENGLISH:
-                "It seems that the text you sent me is not a URL. Please send me a valid URL or a file.",
+                "🚨 It seems that the URL you sent me is not valid. Please, send me a valid URL.",
             SPANISH:
-                "Parece que el texto que me enviaste no es una URL. Por favor, envíame una URL válida."
+                "🚨 Parece que la URL que me enviaste no es válida. Por favor, envíame una URL válida.",
+        },
+        "results": {
+            ENGLISH: "📊 Here are the results of the analysis for the domain %s:",
+            SPANISH: "📊 Aquí están los resultados del análisis para el dominio %s:",
         },
     }
 }

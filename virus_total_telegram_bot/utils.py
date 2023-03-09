@@ -5,6 +5,7 @@ import time
 import uuid
 
 import structlog
+import vt
 
 from telegram import Update
 from telegram.ext import ConversationHandler, CallbackContext
@@ -183,20 +184,29 @@ def clear_user_data(context: CallbackContext):
     context.user_data.clear()
 
 
-def check_url(text: str):
+def parse_url_info(analysis: vt.object.Object):
     """
-    Check if the text is a valid url.
+    Parse the url info from the analysis object.
 
     Parameters:
     -----------
-    - text: str
-        The text to check.
+    - analysis: vt.object.Object object
+        The analysis object returned by the VirusTotal API.
 
     Returns:
     --------
-    - bool
-        True if the text is a valid url, False otherwise.
+    - url_info: str
+        The url info in a human readable format.
     """
-    if text.startswith('http://') or text.startswith('https://'):
-        return True
-    return False
+    analysis_dict = analysis.to_dict()
+    harmless = analysis_dict['attributes']['stats']['harmless']
+    malicious = analysis_dict['attributes']['stats']['malicious']
+    suspicious = analysis_dict['attributes']['stats']['suspicious']
+    undetected = analysis_dict['attributes']['stats']['undetected']
+    url_info = (
+        f"🟢 **Harmless**: {harmless}\n"
+        f"🔴 **Malicious**: {malicious}\n"
+        f"🟡 **Suspicious**: {suspicious}\n"
+        f"🟣 **Undetected**: {undetected}\n"
+    )
+    return url_info

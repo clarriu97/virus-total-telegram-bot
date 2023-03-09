@@ -24,7 +24,7 @@ def run(cfg: Config):
     application = ApplicationBuilder().token(cfg.bot_apikey).build()
     client = vt.Client(cfg.virus_total_apikey)
 
-    start_handler = CommandHandler('start', start) 
+    start_handler = CommandHandler('start', start)
     text_handler = MessageHandler(filters.TEXT, partial(text, client=client))
     file_handler = MessageHandler(filters.Document.ALL, partial(file, client=client))
 
