@@ -33,5 +33,25 @@ dialogs = {
             ENGLISH: "📊 Here are the results of the analysis for the domain %s:",
             SPANISH: "📊 Aquí están los resultados del análisis para el dominio %s:",
         },
-    }
+    },
+    "file_received": {
+        "analyzing": {
+            ENGLISH: "🔎 File received! Starting the analysis, I will send you back the results, it might take a few minutes.",
+            SPANISH: "🔎 Archivo recibido! Comenzando el análisis, te enviaré los resultados, puede tardar unos minutos.",
+        },
+        "error": {
+            ENGLISH:
+                "🚨 It seems that the file you sent me is not valid. Please, try anotherone.",
+            SPANISH:
+                "🚨 Parece que el archivo que me enviaste no es válido. Por favor, intenta con otro.",
+        },
+        "too_big": {
+            ENGLISH: "🚨 The file you sent me is too big. Please, send me a file smaller than %s megabytes.",
+            SPANISH: "🚨 El archivo que me enviaste es demasiado grande. Por favor, envíame un archivo de menos de %s megabytes.",
+        },
+        "results": {
+            ENGLISH: "📊 Here are the results of the analysis for the file %s:",
+            SPANISH: "📊 Aquí están los resultados del análisis para el archivo %s:",
+        },
+    },
 }

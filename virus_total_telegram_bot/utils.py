@@ -1,6 +1,8 @@
 """
 Utils to be used around the bot
 """
+import os
+import hashlib
 import time
 import uuid
 
@@ -210,3 +212,55 @@ def parse_url_info(analysis: vt.object.Object):
         f"🟣 **Undetected**: {undetected}\n"
     )
     return url_info
+
+
+def parse_file_info(analysis: vt.object.Object):
+    """
+    Parse the file info from the analysis object.
+
+    Parameters:
+    -----------
+    - analysis: vt.object.Object object
+        The analysis object returned by the VirusTotal API.
+    
+    Returns:
+    --------
+    - file_info: str
+        The file info in a human readable format.
+    """
+    analysis_dict = analysis.to_dict()
+    harmless = analysis_dict['attributes']['stats']['harmless']
+    malicious = analysis_dict['attributes']['stats']['malicious']
+    suspicious = analysis_dict['attributes']['stats']['suspicious']
+    undetected = analysis_dict['attributes']['stats']['undetected']
+    type_unsupported = analysis_dict['attributes']['stats']['type-unsupported']
+    file_info = (
+        f"🟢 **Harmless**: {harmless}\n"
+        f"🔴 **Malicious**: {malicious}\n"
+        f"🟡 **Suspicious**: {suspicious}\n"
+        f"🟣 **Undetected**: {undetected}\n"
+        f"⚪ **Type unsupported**: {type_unsupported}\n"
+    )
+    return file_info
+
+
+def get_file_size_and_sha256(file_path: str):
+    """
+    Get the file size in MB and the sha256 hash of the file.
+
+    Parameters:
+    -----------
+    - file_path: str
+        The path of the file.
+
+    Returns:
+    --------
+    - file_size: int
+        The size of the file in bytes.
+    - sha256: str
+        The sha256 hash of the file.
+    """
+    file_size = os.path.getsize(file_path)
+    file_size_mb = file_size / 1000000
+    sha256 = hashlib.sha256(open(file_path, 'rb').read()).hexdigest()
+    return file_size_mb, sha256

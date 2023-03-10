@@ -26,7 +26,7 @@ def run(cfg: Config):
 
     start_handler = CommandHandler('start', start)
     text_handler = MessageHandler(filters.TEXT, partial(text, client=client))
-    file_handler = MessageHandler(filters.Document.ALL, partial(file, client=client))
+    file_handler = MessageHandler(filters.Document.ALL, partial(file, client=client, files_max_size=cfg.files_max_size))
 
     application.add_handler(start_handler)
     application.add_handler(text_handler)

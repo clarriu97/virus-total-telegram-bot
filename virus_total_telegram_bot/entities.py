@@ -12,3 +12,4 @@ class Config(BaseModel):
     logs_path: str
     bot_apikey: str
     virus_total_apikey: str
+    files_max_size: int

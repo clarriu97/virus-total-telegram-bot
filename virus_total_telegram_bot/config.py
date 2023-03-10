@@ -79,10 +79,12 @@ def load_configuration(artifacts_path: str, logs_file_path: str):
 
     VIRUS_TOTAL_BOT_APIKEY = os.getenv("VIRUS_TOTAL_BOT_APIKEY")    # pylint: disable=invalid-name
     VIRUS_TOTAL_APIKEY = os.getenv("VIRUS_TOTAL_APIKEY")            # pylint: disable=invalid-name
+    FILES_MAX_SIZE = os.getenv("FILES_MAX_SIZE", "5")               # pylint: disable=invalid-name
     config = Config(
         artifacts_path=artifacts_path,
         logs_path=logs_file_path,
         bot_apikey=VIRUS_TOTAL_BOT_APIKEY,
-        virus_total_apikey=VIRUS_TOTAL_APIKEY
+        virus_total_apikey=VIRUS_TOTAL_APIKEY,
+        files_max_size=FILES_MAX_SIZE
     )
     return config
