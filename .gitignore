@@ -110,3 +110,6 @@ ENV/
 
 # Emacs
 *~
+
+# virus total bot
+files/
