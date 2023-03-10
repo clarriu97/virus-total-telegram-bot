@@ -21,9 +21,9 @@ def virus_total():
     python virus_total_telegram_bot/cli.py
     ```
     """
-    logs_path = os.getenv("LOGS_path", "/tmp")
-    artifacts_path = os.getenv("ARTIFACTORIES_path", "/tmp")
-    config.load_loggers()
+    logs_path = os.getenv("LOGS_PATH", "/tmp")
+    artifacts_path = os.getenv("ARTIFACTORIES_PATH", "/tmp")
+    config.initialize_loggers()
     config.create_application_directories(logs_path, artifacts_path)
     cfg = config.load_configuration(artifacts_path, logs_path)
     app.run(cfg)

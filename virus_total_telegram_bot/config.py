@@ -10,7 +10,7 @@ import structlog
 from virus_total_telegram_bot.entities import Config
 
 
-def load_loggers():
+def initialize_loggers():
     """
     Load the loggers
 
