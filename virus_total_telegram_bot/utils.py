@@ -222,7 +222,7 @@ def parse_file_info(analysis: vt.object.Object):
     -----------
     - analysis: vt.object.Object object
         The analysis object returned by the VirusTotal API.
-    
+
     Returns:
     --------
     - file_info: str
