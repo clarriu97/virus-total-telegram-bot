@@ -65,7 +65,7 @@ def request_arrived(update: Update, context: CallbackContext, action: str):
     context.user_data['username'] = username
     context.user_data['id'] = user_id
     add_request_arrived_data(context, action, username, user_id, request_id)
-    logger.info("request_arrived", action=action, username=username, request_id=request_id)
+    logger.info("request_arrived", action=action, username=username, user_id=user_id, request_id=request_id)
 
 
 def get_user_id(update: Update):
