@@ -47,7 +47,7 @@ def get_username(update: Update):
     return username
 
 
-def request_arrived(update: Update, context: CallbackContext, command: str):
+def request_arrived(update: Update, context: CallbackContext, action: str):
     """
     Performs the configuration needed for every request that arrives.
 
@@ -55,8 +55,8 @@ def request_arrived(update: Update, context: CallbackContext, command: str):
     -----------
     - update: telegram.Update object
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
-    - command: str
-        The command that the user sent to the bot.
+    - action: str
+        The action that the user sent to the bot.
     """
     username = get_username(update)
     user_id = get_user_id(update)
@@ -64,8 +64,8 @@ def request_arrived(update: Update, context: CallbackContext, command: str):
     context.user_data['request_id'] = request_id
     context.user_data['username'] = username
     context.user_data['id'] = user_id
-    add_request_arrived_data(context, command, username, user_id, request_id)
-    logger.info("request_arrived", command=command, username=username, request_id=request_id)
+    add_request_arrived_data(context, action, username, user_id, request_id)
+    logger.info("request_arrived", action=action, username=username, request_id=request_id)
 
 
 def get_user_id(update: Update):
@@ -104,15 +104,15 @@ def get_user_language(update: Update):  # pylint: disable=unused-argument
     return lang
 
 
-def add_request_arrived_data(context: CallbackContext, command: str, username: str, user_id: str, request_id: str):
+def add_request_arrived_data(context: CallbackContext, action: str, username: str, user_id: str, request_id: str):
     """
     Add request arrived data and application metadata to the context.
 
     Parameters:
     -----------
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
-    - command: str
-        The command that the user sent to the bot.
+    - action: str
+        The action that the user sent to the bot.
     - username: str
         The username of the user that sent the message.
     - user_id: str
@@ -124,7 +124,7 @@ def add_request_arrived_data(context: CallbackContext, command: str, username: s
             "integrator": "clarriu97"
         },
         "request": {
-            "command": command,
+            "action": action,
             "username": username,
             "user_id": user_id,
             "result": None,

@@ -23,8 +23,22 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max_si
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
     - files_max_size: int
     """
-    request_arrived(update, context, command="/start")
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['start'][ENGLISH] % files_max_size)
+    await help(update, context, files_max_size, command="/start")
+
+
+async def help(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max_size: int, command: str = "/help"):
+    """
+    Callback for the /help command.
+
+    Parameters:
+    -----------
+    - update: telegram.Update object
+    - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
+    - files_max_size: int
+    - command: str
+    """
+    request_arrived(update, context, action=command)
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['help'][ENGLISH] % files_max_size)
 
 
 async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client):
@@ -37,7 +51,7 @@ async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
     - client: vt.Client object
     """
-    request_arrived(update, context, command="text")
+    request_arrived(update, context, action="text")
     text_received = update.message.text
     await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['text_received']['analyzing'][ENGLISH])
     try:
@@ -64,7 +78,7 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     - client: vt.Client object
     - files_max_size: int
     """
-    request_arrived(update, context, command="file")
+    request_arrived(update, context, action="file")
     await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['analyzing'][ENGLISH])
     file_id = update.message.document.file_id
     new_file = await context.bot.get_file(file_id)

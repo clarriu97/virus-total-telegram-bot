@@ -5,7 +5,7 @@ ENGLISH = 'en'
 SPANISH = 'es'
 
 dialogs = {
-    "start": {
+    "help": {
         ENGLISH:
             "💻 Hi there! Welcome to Virus Total 🔍, I am an unofficial Telegram bot that uses the "
             "VirusTotal API (https://virustotal.com) to perform security analysis on URLs and files. "
