@@ -7,7 +7,7 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, fil
 from virus_total_telegram_bot.entities import Config
 from virus_total_telegram_bot.callbacks import (
     start,
-    help,
+    bot_help,
     text,
     file
 )
@@ -26,7 +26,7 @@ def run(cfg: Config):
     client = vt.Client(cfg.virus_total_apikey)
 
     start_handler = CommandHandler('start', partial(start, files_max_size=cfg.files_max_size))
-    help_handler = CommandHandler('help', partial(help, files_max_size=cfg.files_max_size))
+    help_handler = CommandHandler('help', partial(bot_help, files_max_size=cfg.files_max_size))
     text_handler = MessageHandler(filters.TEXT, partial(text, client=client))
     file_handler = MessageHandler(filters.Document.ALL, partial(file, client=client, files_max_size=cfg.files_max_size))
 

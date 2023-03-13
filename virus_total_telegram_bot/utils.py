@@ -262,5 +262,6 @@ def get_file_size_and_sha256(file_path: str):
     """
     file_size = os.path.getsize(file_path)
     file_size_mb = file_size / 1000000
-    sha256 = hashlib.sha256(open(file_path, 'rb').read()).hexdigest()
+    with open(file_path, 'rb') as f:
+        sha256 = hashlib.sha256(f.read()).hexdigest()
     return file_size_mb, sha256

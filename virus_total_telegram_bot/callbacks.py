@@ -23,10 +23,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max_si
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
     - files_max_size: int
     """
-    await help(update, context, files_max_size, command="/start")
+    await bot_help(update, context, files_max_size, command="/start")
 
 
-async def help(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max_size: int, command: str = "/help"):
+async def bot_help(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max_size: int, command: str = "/help"):
     """
     Callback for the /help command.
 
@@ -85,7 +85,7 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     file_name = update.message.document.file_name
     await new_file.download_to_drive(file_name)
 
-    file_size, file_hash = get_file_size_and_sha256(file_name)
+    file_size, _ = get_file_size_and_sha256(file_name)
     if file_size > files_max_size:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['too_big'][ENGLISH] % files_max_size)
         return
