@@ -22,7 +22,7 @@ def virus_total():
     ```
     """
     logs_path = os.getenv("LOGS_PATH", "/tmp")
-    artifacts_path = os.getenv("ARTIFACTORIES_PATH", "/tmp")
+    artifacts_path = os.getenv("ARTIFACTS_PATH", "/tmp")
     config.initialize_loggers()
     config.create_application_directories(logs_path, artifacts_path)
     cfg = config.load_configuration(artifacts_path, logs_path)
