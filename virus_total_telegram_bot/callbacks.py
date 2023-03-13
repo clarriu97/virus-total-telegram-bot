@@ -13,7 +13,7 @@ from virus_total_telegram_bot.utils import (
 from virus_total_telegram_bot.strings import dialogs, ENGLISH
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max_size: int):
     """
     Callback for the /start command.
 
@@ -21,9 +21,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     -----------
     - update: telegram.Update object
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
+    - files_max_size: int
     """
     request_arrived(update, context, command="/start")
-    await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['start'][ENGLISH])
+    await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['start'][ENGLISH] % files_max_size)
 
 
 async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client):
@@ -61,6 +62,7 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     - update: telegram.Update object
     - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
     - client: vt.Client object
+    - files_max_size: int
     """
     request_arrived(update, context, command="file")
     await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['analyzing'][ENGLISH])
