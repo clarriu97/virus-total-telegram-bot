@@ -9,7 +9,9 @@ from virus_total_telegram_bot.utils import (
     request_served,
     parse_url_info,
     parse_file_info,
-    get_file_size_and_sha256
+    get_file_size_and_sha256,
+    get_user_id,
+    get_user_id_artifacts_path
 )
 from virus_total_telegram_bot.strings import dialogs, ENGLISH
 
@@ -71,7 +73,7 @@ async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     request_served(update, context)
 
 
-async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client, files_max_size: int):
+async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client, files_max_size: int, artifacts_path: str):
     """
     Callback for the files received by the bot.
 
@@ -87,16 +89,19 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     file_id = update.message.document.file_id
     new_file = await context.bot.get_file(file_id)
     file_name = update.message.document.file_name
-    await new_file.download_to_drive(file_name)
+    user_id = str(get_user_id(update))
+    user_id_artifacts_path = get_user_id_artifacts_path(artifacts_path, user_id)
+    file_path = f"{user_id_artifacts_path}/{file_name}"
+    await new_file.download_to_drive(file_path)
 
-    file_size, _ = get_file_size_and_sha256(file_name)
+    file_size, _ = get_file_size_and_sha256(file_path)
     if file_size > files_max_size:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['too_big'][ENGLISH] % files_max_size)
         request_served(update, context)
         return
 
     try:
-        with open(file_name, 'rb') as f:
+        with open(file_path, 'rb') as f:
             analysis = await client.scan_file_async(f, wait_for_completion=True)
     except vt.error.APIError as e:
         print(e)

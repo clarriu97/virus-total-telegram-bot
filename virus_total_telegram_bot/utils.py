@@ -265,3 +265,25 @@ def get_file_size_and_sha256(file_path: str):
     with open(file_path, 'rb') as f:
         sha256 = hashlib.sha256(f.read()).hexdigest()
     return file_size_mb, sha256
+
+
+def get_user_id_artifacts_path(artifacts_path: str, user_id: str):
+    """
+    Get the path of the artifacts folder of the user.
+
+    Parameters:
+    -----------
+    - artifacts_path: str
+        The path of the artifacts folder.
+    - user_id: str
+        The telegram id of the user.
+
+    Returns:
+    --------
+    - user_id_artifacts_path: str
+        The path of the artifacts folder of the user.
+    """
+    user_id_artifacts_path = os.path.join(artifacts_path, user_id)
+    if not os.path.exists(user_id_artifacts_path):
+        os.makedirs(user_id_artifacts_path)
+    return user_id_artifacts_path

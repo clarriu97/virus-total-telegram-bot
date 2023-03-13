@@ -28,7 +28,8 @@ def run(cfg: Config):
     start_handler = CommandHandler('start', partial(start, files_max_size=cfg.files_max_size))
     help_handler = CommandHandler('help', partial(bot_help, files_max_size=cfg.files_max_size))
     text_handler = MessageHandler(filters.TEXT, partial(text, client=client))
-    file_handler = MessageHandler(filters.Document.ALL, partial(file, client=client, files_max_size=cfg.files_max_size))
+    file_handler = MessageHandler(
+        filters.Document.ALL, partial(file, client=client, files_max_size=cfg.files_max_size, artifacts_path=cfg.artifacts_path))
 
     application.add_handler(start_handler)
     application.add_handler(help_handler)
