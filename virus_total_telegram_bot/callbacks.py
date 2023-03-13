@@ -6,6 +6,7 @@ from telegram.ext import ContextTypes
 
 from virus_total_telegram_bot.utils import (
     request_arrived,
+    request_served,
     parse_url_info,
     parse_file_info,
     get_file_size_and_sha256
@@ -39,6 +40,7 @@ async def bot_help(update: Update, context: ContextTypes.DEFAULT_TYPE, files_max
     """
     request_arrived(update, context, action=command)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['help'][ENGLISH] % files_max_size)
+    request_served(update, context)
 
 
 async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client):
@@ -59,12 +61,14 @@ async def text(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     except vt.error.APIError as e:
         print(e)
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['text_received']['error'][ENGLISH])
+        request_served(update, context)
         return
     url_info = parse_url_info(analysis)
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=dialogs['text_received']['results'][ENGLISH] % text_received)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=url_info, parse_mode='Markdown')
+    request_served(update, context)
 
 
 async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Client, files_max_size: int):
@@ -88,6 +92,7 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     file_size, _ = get_file_size_and_sha256(file_name)
     if file_size > files_max_size:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['too_big'][ENGLISH] % files_max_size)
+        request_served(update, context)
         return
 
     try:
@@ -96,8 +101,10 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, client: vt.Cl
     except vt.error.APIError as e:
         print(e)
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['error'][ENGLISH])
+        request_served(update, context)
         return
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=dialogs['file_received']['results'][ENGLISH] % file_name)
     await context.bot.send_message(chat_id=update.effective_chat.id, text=parse_file_info(analysis), parse_mode='Markdown')
+    request_served(update, context)
