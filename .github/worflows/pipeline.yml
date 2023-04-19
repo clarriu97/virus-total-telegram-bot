@@ -1,0 +1,73 @@
+name: Python CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.tox
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install Dependencies
+        run: make env-create
+  test:
+    depends-on: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.tox
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Run Tests
+        run: make test
+  quality:
+    depends-on: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Cache dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.tox
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-dev.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Lint Code
+        run: make lint && make lint-tests
+      - name: Check Code Style
+        run: make code-style
+      - name: Check dependencies
+        run: make check-dependencies
+      - name: Check for security issues
+        run: make security
+      - name: Check the code metrics
+        run: make code-metrics
