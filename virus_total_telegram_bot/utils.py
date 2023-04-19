@@ -154,10 +154,10 @@ def add_file_data(context: CallbackContext, file_name: str, file_size: int, file
         The id that Telegram gives to the file.
     """
     context.user_data['event_info']['file'] = {}
-    context.user_data['event_info']['file']['file_name'] = file_name
-    context.user_data['event_info']['file']['file_size'] = file_size
-    context.user_data['event_info']['file']['file_hash'] = file_hash
-    context.user_data['event_info']['file']['file_id'] = file_id
+    context.user_data['event_info']['file']['name'] = file_name
+    context.user_data['event_info']['file']['size'] = file_size
+    context.user_data['event_info']['file']['hash'] = file_hash
+    context.user_data['event_info']['file']['id'] = file_id
 
 
 def current_milliseconds():
