@@ -41,7 +41,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Run Tests
-        run: make test
+        run: make ci-test
   quality:
     runs-on: ubuntu-latest
     needs: [prepare]
@@ -60,12 +60,12 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Lint Code
-        run: make lint && make lint-tests
+        run: make ci-lint && make ci-lint-tests
       - name: Check Code Style
-        run: make code-style
+        run: make ci-code-style
       - name: Check dependencies
-        run: make check-dependencies
+        run: make ci-check-dependencies
       - name: Check for security issues
-        run: make security
+        run: make ci-security
       - name: Check the code metrics
-        run: make code-metrics
+        run: make ci-code-metrics
