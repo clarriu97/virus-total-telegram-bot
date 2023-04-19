@@ -45,6 +45,10 @@ dialogs = {
             SPANISH:
                 "🚨 Parece que el archivo que me enviaste no es válido. Por favor, intenta con otro.",
         },
+        "downloading": {
+            ENGLISH: "📥 Downloading the file you sent me, give me one second...",
+            SPANISH: "📥 Descargando el archivo que me enviaste, dame un segundo...",
+        },
         "too_big": {
             ENGLISH: "🚨 The file you sent me is too big. Please, send me a file smaller than %s megabytes.",
             SPANISH: "🚨 El archivo que me enviaste es demasiado grande. Por favor, envíame un archivo de menos de %s megabytes.",

@@ -10,7 +10,7 @@ import structlog
 import vt
 
 from telegram import Update
-from telegram.ext import ConversationHandler, CallbackContext
+from telegram.ext import CallbackContext
 
 from virus_total_telegram_bot.strings import ENGLISH
 
@@ -25,6 +25,7 @@ class Results():
     SUCCESS = "success"
     CANCELLED = "cancelled"
     ERROR = "error"
+    FILE_TOO_BIG = "file_too_big"
 
 
 def get_username(update: Update):
@@ -147,16 +148,7 @@ def current_milliseconds():
     return round(time.time() * 1000)
 
 
-def conversation_end(update: Update, context: CallbackContext, result=Results.SUCCESS, save_artifacts=True):
-    """
-    Conversation end function
-    """
-    save_request_data(context, result)
-    request_served(update, context, save_artifacts)
-    return ConversationHandler.END
-
-
-def save_request_data(context: CallbackContext, result):
+def save_request_data(context: CallbackContext, result: str):
     event_info = get_event_info(context)
     end_time = current_milliseconds()
     event_info['request']['end_time'] = end_time
@@ -165,16 +157,14 @@ def save_request_data(context: CallbackContext, result):
     event_info['request']['result'] = result
 
 
-def request_served(update: Update, context: CallbackContext, save_artifacts=True):  # pylint: disable=unused-argument
+def request_served(update: Update, context: CallbackContext, result: str, save_artifacts: bool = False):  # pylint: disable=unused-argument
     """Request served function"""
     if 'request_id' not in context.user_data:
         logger.warning('request_served_no_request_id')
         return
     request_id = context.user_data['request_id']
-    logger.info("request_served", request_id=request_id)
-    if save_artifacts:
-        # generate_collector(get_event_info(context))
-        pass
+    save_request_data(context, result)
+    logger.info("request_served", request_id=request_id, user_data=context.user_data)
     clear_user_data(context)
 
 
