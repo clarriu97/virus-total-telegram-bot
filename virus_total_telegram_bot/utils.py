@@ -137,6 +137,29 @@ def add_request_arrived_data(context: CallbackContext, action: str, username: st
     }
 
 
+def add_file_data(context: CallbackContext, file_name: str, file_size: int, file_hash: str, file_id: str):
+    """
+    Add file data to the context.
+
+    Parameters:
+    -----------
+    - context: telegram.ext.ContextTypes.DEFAULT_TYPE object
+    - file_name: str
+        The name of the file.
+    - file_size: int
+        The size of the file.
+    - file_hash: str
+        The hash of the file.
+    - file_id: str
+        The id that Telegram gives to the file.
+    """
+    context.user_data['event_info']['file'] = {}
+    context.user_data['event_info']['file']['file_name'] = file_name
+    context.user_data['event_info']['file']['file_size'] = file_size
+    context.user_data['event_info']['file']['file_hash'] = file_hash
+    context.user_data['event_info']['file']['file_id'] = file_id
+
+
 def current_milliseconds():
     """
     Get the current time in milliseconds.

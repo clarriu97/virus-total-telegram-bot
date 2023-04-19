@@ -12,6 +12,7 @@ from virus_total_telegram_bot.utils import (
     get_file_size_and_sha256,
     get_user_id,
     get_user_id_artifacts_path,
+    add_file_data,
     Results
 )
 from virus_total_telegram_bot.strings import dialogs, ENGLISH
@@ -108,7 +109,8 @@ async def file(update: Update, context: ContextTypes.DEFAULT_TYPE, cfg: Config):
     await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['downloading'][ENGLISH])
     await new_file.download_to_drive(file_path)
 
-    file_size, _ = get_file_size_and_sha256(file_path)
+    file_size, file_sha256 = get_file_size_and_sha256(file_path)
+    add_file_data(context, file_name, file_size, file_sha256, file_id)
     if file_size > cfg.files_max_size:
         await context.bot.send_message(chat_id=update.effective_chat.id, text=dialogs['file_received']['too_big'][ENGLISH] % cfg.files_max_size)
         request_served(update, context, result=Results.FILE_TOO_BIG)
