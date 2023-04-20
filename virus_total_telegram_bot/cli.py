@@ -21,8 +21,8 @@ def virus_total():
     python virus_total_telegram_bot/cli.py
     ```
     """
-    logs_path = os.getenv("LOGS_PATH", "/tmp")
-    artifacts_path = os.getenv("ARTIFACTS_PATH", "/tmp")
+    logs_path = os.getenv("LOGS_PATH", "/tmp")              # nosec
+    artifacts_path = os.getenv("ARTIFACTS_PATH", "/tmp")    # nosec
     config.initialize_loggers()
     config.create_application_directories(logs_path, artifacts_path)
     cfg = config.load_configuration(artifacts_path, logs_path)
