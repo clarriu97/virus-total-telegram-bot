@@ -122,10 +122,7 @@ disable =
     map-builtin-not-iterating,
     I0011,
     I0013,
-    C0103, #invalid name
-    redefined-outer-name,
-    missing-docstring
-
+    bad-continuation
 # Google disables the following ones. TODO: add them if reasonable
 # disable =
 #    cyclic-import,
@@ -217,7 +214,7 @@ dummy-variables-rgx=^\*{0,2}(_$|unused_|dummy_)
 [FORMAT]
 
 # Maximum number of characters on a single line.
-max-line-length=120
+max-line-length=150
 
 # Regexp for a line that is allowed to be longer than the limit.
 ignore-long-lines=^\s*(# )?<?https?://\S+>?$
@@ -332,12 +329,12 @@ bad-functions=input,apply,reduce
 # (useful for modules/projects where namespaces are manipulated during runtime
 # and thus existing member attributes cannot be deduced by static analysis
 # DEFAULT:  ignored-modules=
-ignored-modules=responses, rx
+ignored-modules=rx
 
 # List of classes names for which member attributes should not be checked
 # (useful for classes with attributes dynamically set).
 # DEFAULT:  ignored-classes=SQLObject
-ignored-classes = AppConfig, Observable
+ignored-classes = Observable, AppConfig
 
 # When zope mode is activated, add a predefined set of Zope acquired attributes
 # to generated-members.
@@ -413,6 +410,8 @@ int-import-graph=
 # Force import order to recognize a module as part of the standard
 # compatibility libraries.
 known-standard-library=
+  future
+  install_aliases
 
 # Force import order to recognize a module as part of a third party library.
 known-third-party=enchant
