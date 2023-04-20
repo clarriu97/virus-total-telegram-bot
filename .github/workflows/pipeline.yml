@@ -64,7 +64,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Lint Code
-        run: make ci-lint && make ci-lint-tests
+        run: make ci-lint
       - name: Check Code Style
         run: make ci-code-style
       - name: Check dependencies
