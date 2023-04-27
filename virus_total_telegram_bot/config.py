@@ -13,7 +13,7 @@ import structlog
 from virus_total_telegram_bot.entities import Config
 
 
-def extract_from_record(_, __, event_dict):
+def extract_from_record(_, __, event_dict):  # pylint: disable=invalid-name
     """
     Extract thread and process names and add them to the event dict.
     """
@@ -24,7 +24,7 @@ def extract_from_record(_, __, event_dict):
     return event_dict
 
 
-def add_hostname(_, __, event_dict):
+def add_hostname(_, __, event_dict):  # pylint: disable=invalid-name
     """
     Add hostname to the event dict.
 
@@ -47,7 +47,7 @@ def add_hostname(_, __, event_dict):
     return event_dict
 
 
-def add_user(_, __, event_dict):
+def add_user(_, __, event_dict):  # pylint: disable=invalid-name
     """
     Add username to the event dict.
 
