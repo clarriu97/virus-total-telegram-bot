@@ -257,9 +257,9 @@ def parse_file_info(analysis: vt.object.Object):
     return file_info
 
 
-def get_file_size_and_sha256(file_path: str):
+def get_file_sha256(file_path: str):
     """
-    Get the file size in MB and the sha256 hash of the file.
+    Get the file sha256 hash of the file.
 
     Parameters:
     -----------
@@ -268,16 +268,12 @@ def get_file_size_and_sha256(file_path: str):
 
     Returns:
     --------
-    - file_size: int
-        The size of the file in bytes.
     - sha256: str
         The sha256 hash of the file.
     """
-    file_size = os.path.getsize(file_path)
-    file_size_mb = file_size / 1000000
     with open(file_path, 'rb') as f:
         sha256 = hashlib.sha256(f.read()).hexdigest()
-    return file_size_mb, sha256
+    return sha256
 
 
 def get_user_id_artifacts_path(artifacts_path: str, user_id: str):
