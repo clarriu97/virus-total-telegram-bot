@@ -136,7 +136,6 @@ def initialize_loggers(logs_path: str):
     console_config = {
         "log_name": "",
         "log_format": "console",
-        "log_handler": "stdout",
         "log_level": "DEBUG",
         "log_handler": "stdout"
     }
