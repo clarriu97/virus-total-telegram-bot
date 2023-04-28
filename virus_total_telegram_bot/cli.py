@@ -23,8 +23,8 @@ def virus_total():
     """
     logs_path = os.getenv("LOGS_PATH", "/tmp")              # nosec
     artifacts_path = os.getenv("ARTIFACTS_PATH", "/tmp")    # nosec
-    config.initialize_loggers()
     config.create_application_directories(logs_path, artifacts_path)
+    config.initialize_loggers(logs_path)
     cfg = config.load_configuration(artifacts_path, logs_path)
     app.run(cfg)
 
