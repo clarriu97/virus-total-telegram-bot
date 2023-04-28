@@ -7,20 +7,20 @@ ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
+# Install all the supported versions of python using the PPA and other useful tools
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository ppa:deadsnakes/ppa -y && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    apt-get install -y --no-install-recommends python3.8-dev && \
+    apt-get install -y --no-install-recommends python3.8-distutils
+
 RUN useradd -ms /bin/bash -u 1000 python-dev && \
   echo "python-dev ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 WORKDIR /home/python-dev
 USER python-dev
-
-# Install all the supported versions of python using the PPA and other useful tools
-RUN sudo apt-get update && \
-    sudo apt-get install -y --no-install-recommends software-properties-common=0.99.9.11 && \
-    sudo add-apt-repository ppa:deadsnakes/ppa -y && \
-    sudo apt-get update && \
-    sudo apt-get install -y --no-install-recommends curl=7.68.0-1ubuntu2.16 && \
-    sudo apt-get install -y python3-distutils && \
-    sudo apt-get install -y python3-apt
 
 # Install pip for the desired python version
 RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
