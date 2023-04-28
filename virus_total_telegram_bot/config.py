@@ -30,8 +30,6 @@ def add_hostname(_, __, event_dict):  # pylint: disable=invalid-name
 
     Parameters:
     -----------
-    - logger: structlog.stdlib.BoundLogger
-    - method_name: str
     - event_dict: dict
         The event dict.
 
@@ -53,8 +51,6 @@ def add_user(_, __, event_dict):  # pylint: disable=invalid-name
 
     Parameters:
     -----------
-    - logger: structlog.stdlib.BoundLogger
-    - method_name: str
     - event_dict: dict
         The event dict.
 
@@ -70,6 +66,64 @@ def add_user(_, __, event_dict):  # pylint: disable=invalid-name
     return event_dict
 
 
+def _initialize_logging(log_cfg: dict, user_processors=tuple()):
+    """
+    Initialize logging.
+
+    Parameters:
+    -----------
+    - log_cfg: dict
+        The logging configuration.
+    - user_processors: tuple
+        The user processors.
+    """
+    processors = [
+        structlog.contextvars.merge_contextvars,
+        structlog.stdlib.add_log_level,
+        structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M.%S"),
+        structlog.stdlib.PositionalArgumentsFormatter(),
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        add_hostname,
+        add_user
+    ]
+
+    if not structlog.is_configured():
+        structlog.configure(
+            processors=processors
+            + list(user_processors)
+            + [structlog.stdlib.ProcessorFormatter.wrap_for_formatter],
+            logger_factory=structlog.stdlib.LoggerFactory(),
+            context_class=structlog.threadlocal.wrap_dict(dict),
+            wrapper_class=structlog.stdlib.BoundLogger,
+        )
+
+    formatter = structlog.processors.JSONRenderer() if log_cfg["log_format"] == "json" else structlog.dev.ConsoleRenderer(colors=True)
+    std_formatter = structlog.stdlib.ProcessorFormatter(
+        processor=formatter, foreign_pre_chain=processors
+    )
+
+    if log_cfg["log_handler"] == "stdout":
+        handler = logging.StreamHandler()
+    if log_cfg["log_handler"] == "file":
+        handler_class = logging.handlers.RotatingFileHandler
+        handler_kwargs = {
+            "filename": os.path.join(log_cfg['log_folder'], log_cfg['log_filename']),
+            "maxBytes": log_cfg['log_max_bytes'],
+            "backupCount": log_cfg['log_backup_count']
+        }
+        handler = handler_class(**handler_kwargs)
+
+    handler.setFormatter(std_formatter)
+
+    # configure standard logging
+
+    level = logging.getLevelName(log_cfg["log_level"])
+    logger = logging.getLogger(log_cfg["log_name"])
+    logger.addHandler(handler)
+    logger.setLevel(level)
+
+
 def initialize_loggers(logs_path: str):
     """
     Load the loggers
@@ -79,75 +133,27 @@ def initialize_loggers(logs_path: str):
     - logs_path: str
       The path where the log files are going to be stored.
     """
-    log_file = os.path.join(logs_path, "virus_total_telegram_bot.log")
-    timestamper = structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S")
-    pre_chain = [
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.ExtraAdder(),
-        timestamper,
-    ]
+    console_config = {
+        "log_name": "",
+        "log_format": "console",
+        "log_handler": "stdout",
+        "log_level": "DEBUG",
+        "log_handler": "stdout"
+    }
+    file_config = {
+        "log_name": "",
+        "log_format": "json",
+        "log_handler": "file",
+        "log_max_bytes": 1048576,
+        "log_backup_count": 10,
+        "log_folder": logs_path,
+        "log_filename": "siren_scoop.log",
+        "log_level": "INFO"
+    }
 
-    logging.config.dictConfig({
-      "version": 1,
-      "disable_existing_loggers": False,
-      "formatters": {
-          "json": {
-              "()": structlog.stdlib.ProcessorFormatter,
-              "processors": [
-                add_hostname,
-                add_user,
-                structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-                structlog.processors.JSONRenderer()
-              ],
-              "foreign_pre_chain": pre_chain,
-          },
-          "console": {
-              "()": structlog.stdlib.ProcessorFormatter,
-              "processors": [
-                add_hostname,
-                add_user,
-                structlog.stdlib.ProcessorFormatter.remove_processors_meta,
-                structlog.dev.ConsoleRenderer(colors=True),
-              ],
-              "foreign_pre_chain": pre_chain,
-          },
-      },
-      "handlers": {
-          "default": {
-              "level": "DEBUG",
-              "class": "logging.StreamHandler",
-              "formatter": "console",
-          },
-          "file": {
-              "level": "INFO",
-              "class": "logging.handlers.WatchedFileHandler",
-              "filename": log_file,
-              "formatter": "json",
-          },
-      },
-      "loggers": {
-          "": {
-              "handlers": ["default", "file"],
-              "level": "DEBUG",
-              "propagate": True,
-          },
-      }
-    })
-
-    structlog.configure(
-        processors=[
-            structlog.contextvars.merge_contextvars,
-            structlog.processors.add_log_level,
-            structlog.processors.StackInfoRenderer(),
-            structlog.dev.set_exc_info,
-            structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M.%S"),
-            structlog.dev.ConsoleRenderer()
-        ],
-        wrapper_class=structlog.make_filtering_bound_logger(logging.NOTSET),
-        context_class=dict,
-        logger_factory=structlog.PrintLoggerFactory(),
-        cache_logger_on_first_use=False
-    )
+    _initialize_logging(console_config)
+    if os.getenv("PRODUCTION", "false").lower() == "true":
+        _initialize_logging(file_config)
 
 
 def create_application_directories(logs_path: str, artifacts_path: str):
