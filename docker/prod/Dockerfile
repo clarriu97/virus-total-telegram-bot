@@ -29,9 +29,9 @@ RUN curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && \
 
 # Install dependencies and application
 COPY requirements.txt .
-COPY dist/virus_total_telegram_bot-${VERSION}-cp38-cp38-*.whl /home/python-dev
+COPY dist/virus_total_telegram_bot-${VERSION}-cp38-cp38-*.whl .
 RUN python3.8 -m pip --no-cache-dir install --user --upgrade --ignore-installed -r ./requirements.txt
-RUN python3.8 -m pip --no-cache-dir install --user --upgrade --ignore-installed --no-index --no-deps --find-links /home/python-dev virus_total_telegram_bot==${VERSION}
+RUN python3.8 -m pip --no-cache-dir install --user --upgrade --ignore-installed virus_total_telegram_bot-${VERSION}-cp38-cp38-*.whl
 
 # Final stage: install python and copy dependencies from build stage
 FROM ubuntu:20.04
@@ -60,6 +60,12 @@ COPY --from=builder /home/python-dev/.local/bin/* /usr/local/bin/
 # Create a non-root user to run the container. This step is optional, you can also use any existing user such as `www-data` for web servers (nginx for example)
 RUN groupadd -g 1000 virus_total_telegram_bot && useradd -ms /bin/bash -u 1000 -g 1000 virus_total_telegram_bot
 
+# create directories for logs and configuration, and set permissions
+RUN mkdir -p /opt/virus_total_telegram_bot && \
+  mkdir -p /opt/virus_total_telegram_bot/logs && \
+  mkdir -p /opt/virus_total_telegram_bot/artifacts && \
+  chown -R virus_total_telegram_bot:virus_total_telegram_bot /opt/virus_total_telegram_bot
+
 # Image labels (OCI spec)
 LABEL org.opencontainers.image.created="${BUILD_DATE}" \
     org.opencontainers.image.authors='clarriu97 <larriucarlos@gmail.com>' \
@@ -74,5 +80,7 @@ LABEL org.opencontainers.image.created="${BUILD_DATE}" \
 
 USER virus_total_telegram_bot
 
+ENV PRODUCTION=True
+
 ENTRYPOINT ["tini", "--"]
-CMD ["virus_total_telegram_bot", "run"]
+CMD ["virus_total_telegram_bot"]

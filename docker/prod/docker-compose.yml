@@ -1,0 +1,10 @@
+version: '3.5'
+services:
+  bot:
+    container_name: virus_total_bot
+    image: virus_total_telegram_bot:0.1.0
+    environment:
+      LOGS_PATH:              /opt/virus_total_telegram_bot/logs
+      ARTIFACTS_PATH:         /opt/virus_total_telegram_bot/artifacts
+      VIRUS_TOTAL_BOT_APIKEY: $VIRUS_TOTAL_BOT_APIKEY
+      VIRUS_TOTAL_APIKEY:     $VIRUS_TOTAL_APIKEY
