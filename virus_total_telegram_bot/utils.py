@@ -105,7 +105,7 @@ def get_user_language(update: Update):  # pylint: disable=unused-argument
     return lang
 
 
-def add_request_arrived_data(context: CallbackContext, action: str, username: str, user_id: str, request_id: str):
+def add_request_arrived_data(context: CallbackContext, action: str, username: str, user_id: int, request_id: str):
     """
     Add request arrived data and application metadata to the context.
 
