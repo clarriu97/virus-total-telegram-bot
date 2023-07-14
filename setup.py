@@ -9,6 +9,7 @@ from setuptools.command.build_ext import build_ext as _build_ext
 
 # Packages to include in the distribution
 packages = find_packages(exclude=["*.tests", "*.tests.*", "tests.*", "tests"])
+exclude_from_cythonize = ["entities"]
 
 # Additional data required to install this package
 package_data = {}
@@ -103,6 +104,10 @@ class build_ext(_build_ext): # pylint: disable=too-few-public-methods, invalid-n
                 for filename in os.listdir(target_folder):
                     target_file = os.path.join(target_folder, filename)
 
+                    if any(substring in target_file for substring in exclude_from_cythonize):
+                        if not ".py" in target_file:
+                            os.remove(target_file)
+                        continue
                     if re.match(self.files_to_remove_regex, filename): # remove source files
                         print('removing %s' % target_file)
                         os.remove(target_file)

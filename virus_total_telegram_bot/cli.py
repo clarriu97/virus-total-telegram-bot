@@ -11,7 +11,7 @@ from virus_total_telegram_bot import app
 
 
 @click.command()
-def virus_total():
+def main():
     """
     Entrypoint of the app.
 
@@ -30,4 +30,4 @@ def virus_total():
 
 
 if __name__ == "__main__":  # pragma: no cover
-    virus_total()
+    main()
